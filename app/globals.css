@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+body {
+  color: #5a5753;
+  background: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.subtle-shadow {
+  box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.truncate-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Number of lines of description in Card */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@font-face {
+  font-family: "Cifer";
+  src: url("/cifer.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Venue";
+  src: url("/PlaywriteDEGrund-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Venue2";
+  src: url("/PlaywriteAUTAS-VariableFont_wght.ttf") format("truetype");
+}
+
+.cifer {
+  font-family: "Cifer", sans-serif;
+}
+
+.venue {
+  font-family: "Venue", sans-serif;
+}
+
+.noscroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.noscroll::-webkit-scrollbar {
+  display: none;
+}

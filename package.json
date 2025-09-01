@@ -1,0 +1,35 @@
+{
+  "name": "moodmap",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack -p 4000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "@ant-design/plots": "^2.3.1",
+    "@ant-design/pro-layout": "^7.19.7",
+    "@google/genai": "^1.15.0",
+    "antd": "^5.17.3",
+    "appwrite": "^18.1.1",
+    "dayjs": "^1.11.13",
+    "framer-motion": "^11.0.15",
+    "html-to-image": "^1.11.13",
+    "leaflet": "^1.9.4",
+    "next": "15.3.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "recharts": "^3.1.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.5",
+    "tailwindcss": "^4"
+  }
+}
