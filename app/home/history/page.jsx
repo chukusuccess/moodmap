@@ -7,7 +7,7 @@ import {
   CloseSquareOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
-import { useAuth } from "@/app/contexts/AuthProvider";
+// import { useAuth } from "@/app/contexts/AuthProvider";
 import { LoadingScreen } from "@/app/components/LoadingScreen";
 
 const { Search } = Input;
@@ -17,7 +17,7 @@ export default function History() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
 
   if (loading) return <LoadingScreen />;
 
