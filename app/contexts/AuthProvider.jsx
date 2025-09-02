@@ -32,12 +32,15 @@ const AuthProvider = ({ children }) => {
         if (res.status === true) {
           setCurrentUser({ id: res.$id, fullname: res.name, email: res.email });
           setIsAuthenticated(true);
+          localStorage.setItem("cuid", res.$id);
         } else {
           setCurrentUser(null);
           setIsAuthenticated(false);
+          localStorage.removeItem("cuid");
         }
       } catch (e) {
         console.error("Auth Check Failed:", e.message);
+        localStorage.removeItem("cuid");
         setIsAuthenticated(false);
       } finally {
         setLoading(false);

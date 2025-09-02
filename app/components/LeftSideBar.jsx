@@ -1,36 +1,127 @@
-import { Form, Input, Button } from "antd";
+"use client";
+import { Form, Input, Button, message } from "antd";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { MoodService } from "../services/mood.service";
 
-const emojiOptions = ["😀", "😢", "😡", "🤩", "😴", "🤔", "😎", "🥳"];
+const emojiOptions = [
+  "😀",
+  "😢",
+  "😡",
+  "🤩",
+  "😴",
+  "😎",
+  "🤔",
+  "🥳",
+  "😭",
+  "😇",
+  "😤",
+  "🤯",
+  "🥺",
+  "😱",
+  "😍",
+  "😅",
+  "😌",
+  "🤒",
+  "😷",
+  "🤕",
+  "🥶",
+  "🥵",
+  "😈",
+  "👻",
+  "🤡",
+  "💩",
+  "🤖",
+  "🎉",
+  "🔥",
+  "🌊",
+  "🌸",
+  "🍕",
+  "☕",
+  "⚡",
+  "❤️",
+  "⭐",
+];
 
 export const LeftSideBar = () => {
   const [form] = Form.useForm();
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [share, setShare] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const handleSubmit = (values) => {
-    const payload = {
-      emoji: selectedEmoji,
-      text: values.text || "",
-      // geolocation + user_id here before saving
-    };
-    console.log("Submitting mood:", payload);
+  const currentUserId = localStorage.getItem("cuid");
+
+  const handleSubmit = async (values) => {
+    if (!selectedEmoji) return;
+
+    // 🛑 Spam-control: check last post timestamp
+    const lastPost = localStorage.getItem("lastMoodPost");
+    if (lastPost && Date.now() - parseInt(lastPost) < 60 * 1000) {
+      // 1 min cooldown (adjust later)
+      messageApi.warning("You can only post once per minute.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      let coords = { lat: null, lng: null };
+
+      // 🌍 Try to get geolocation
+      if (navigator.geolocation) {
+        await new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              coords = {
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+              };
+              resolve();
+            },
+            () => resolve(), // ignore errors, allow posting
+            { enableHighAccuracy: true }
+          );
+        });
+      }
+
+      const payload = {
+        emoji: selectedEmoji,
+        lat: coords.lat,
+        lng: coords.lng,
+        userAgent: navigator.userAgent,
+        text: values.text || "",
+        userId: currentUserId ? currentUserId : null,
+      };
+
+      await MoodService.createMood(payload);
+
+      // ✅ success
+      messageApi.success("Mood posted successfully!");
+      form.resetFields();
+      setSelectedEmoji(null);
+      localStorage.setItem("lastMoodPost", Date.now().toString());
+      setShare(false);
+    } catch (err) {
+      console.error("Error posting mood:", err);
+      messageApi.error("Failed to post mood. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div
-      className={`w-full sm:h-full
-       p-4 rounded-2xl bg-white shadow-lg flex flex-col`}
-    >
+    <div className="w-full sm:h-full p-4 rounded-2xl bg-white shadow-lg flex flex-col">
+      {contextHolder}
+
       <motion.h2
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.8 }}
         onClick={() => setShare((prev) => !prev)}
-        className="text-lg font-semibold mb-4 transition-all ease-in-out duration-200"
+        className="text-lg font-semibold mb-4 transition-all ease-in-out duration-200 cursor-pointer"
       >
         Share Your Mood
       </motion.h2>
+
       <AnimatePresence>
         {share && (
           <motion.div
@@ -80,8 +171,8 @@ export const LeftSideBar = () => {
               {/* Submit button */}
               <Form.Item className="mt-auto">
                 <motion.div
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.8 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <Button
                     type="primary"
@@ -89,6 +180,7 @@ export const LeftSideBar = () => {
                     htmlType="submit"
                     block
                     disabled={!selectedEmoji}
+                    loading={loading}
                   >
                     Post Mood
                   </Button>

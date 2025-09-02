@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Card } from "antd";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import {
@@ -6,38 +7,61 @@ import {
   EnvironmentOutlined,
   RiseOutlined,
 } from "@ant-design/icons";
+import { MoodService } from "../services/mood.service";
 
-// Dummy data
-const moodOfTheDay = { emoji: "😀", count: 42 };
-const distribution = [
-  { emoji: "😀", value: 42 },
-  { emoji: "😢", value: 25 },
-  { emoji: "🤩", value: 15 },
-  { emoji: "😴", value: 10 },
-];
-const recentMoods = [
-  { emoji: "😀", text: "Happy", location: "Lagos" },
-  { emoji: "😢", text: "Sad", location: "Berlin" },
-  { emoji: "🤩", text: "Excited!", location: "NYC" },
+// 🎨 Colors for pie slices
+const COLORS = [
+  "#0088FE",
+  "#FF8042",
+  "#FFBB28",
+  "#00C49F",
+  "#FF66CC",
+  "#66FF99",
 ];
 
-// Colors for pie chart slices
-const COLORS = ["#0088FE", "#FF8042", "#FFBB28", "#00C49F"];
+export const RightSideBar = ({ onPanTo }) => {
+  const [moodOfDay, setMoodOfDay] = useState(null);
+  const [distribution, setDistribution] = useState([]);
+  const [recentMoods, setRecentMoods] = useState([]);
 
-export const RightSideBar = () => {
+  useEffect(() => {
+    // 1. Initial fetch
+    MoodService.getMoodOfTheDay().then(setMoodOfDay);
+    MoodService.getMoodDistribution().then(setDistribution);
+    MoodService.getTodayMoods().then((res) => {
+      setRecentMoods(res.documents.slice(0, 10));
+    });
+
+    // 2. Subscribe to realtime updates
+    const unsubscribe = MoodService.subscribeToMoods((newMood) => {
+      setRecentMoods((prev) => [newMood, ...prev].slice(0, 10));
+
+      // update distribution + mood of the day
+      MoodService.getMoodDistribution().then(setDistribution);
+      MoodService.getMoodOfTheDay().then(setMoodOfDay);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="w-full h-full p-4 rounded-2xl bg-white shadow-lg flex flex-col gap-4">
       {/* Mood of the Day */}
       <Card size="small" className="rounded-xl shadow">
         <h2 className="text-lg font-semibold mb-2">Mood of the Day</h2>
-        <div className="flex flex-col gap-2 text-2xl w-full">
-          <span className="flex items-center text-center">
-            {moodOfTheDay.emoji} <span className="text-base">Happy</span>
-          </span>
-          <span className="text-xs text-gray-600">
-            {moodOfTheDay.count} People feeling this way
-          </span>
-        </div>
+        {moodOfDay ? (
+          <div className="flex flex-col gap-2 text-2xl w-full">
+            <span className="flex items-center text-center">
+              {moodOfDay.emoji}
+              <span className="ml-2 text-base">Most felt</span>
+            </span>
+            <span className="text-xs text-gray-600">
+              {moodOfDay.count} people feeling this way today
+            </span>
+          </div>
+        ) : (
+          <span className="text-sm text-gray-500">No moods shared yet</span>
+        )}
       </Card>
 
       {/* Global Distribution */}
@@ -52,11 +76,12 @@ export const RightSideBar = () => {
           <ResponsiveContainer>
             <PieChart>
               <Pie
-                data={distribution}
+                data={distribution.map((d) => ({ ...d, value: d.count }))}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
-                outerRadius={70}
+                outerRadius={80}
+                innerRadius={40} // ✅ makes it a donut
                 label={({ emoji }) => emoji}
               >
                 {distribution.map((entry, index) => (
@@ -66,7 +91,12 @@ export const RightSideBar = () => {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                formatter={(value, name, props) => [
+                  `${value}`,
+                  props.payload.emoji,
+                ]}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -75,19 +105,22 @@ export const RightSideBar = () => {
       {/* Live Mood Feed */}
       <Card size="small" className="rounded-xl shadow flex-1 overflow-y-auto">
         <h2 className="text-lg font-semibold">Live Mood Feed</h2>
-        <span className="text-xs">30 moods shared worldwide</span>
-        <div className="flex flex-col gap-2">
-          {recentMoods.map((m, idx) => (
+        <span className="text-xs">{recentMoods.length} moods shared today</span>
+        <div className="flex flex-col gap-2 mt-2">
+          {recentMoods.map((m) => (
             <div
-              key={idx}
-              className="flex items-center gap-3 rounded-lg border border-gray-200 hover:border-blue-500 p-1"
+              key={m.$id}
+              onClick={() => onPanTo?.([m.lat, m.lng])} // ✅ Pan to mood location
+              className="flex items-center gap-3 rounded-lg border border-gray-200 hover:border-blue-500 p-2 cursor-pointer"
             >
               <span className="text-xl">{m.emoji}</span>
               <div className="flex flex-col">
-                <span className="text-sm text-gray-800">{m.text}</span>
-                <span className="text-xs text-gray-500">
-                  <EnvironmentOutlined /> {m.location} - <ClockCircleOutlined />
-                  Today
+                {m.text && (
+                  <span className="text-sm text-gray-800">{m.text}</span>
+                )}
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <EnvironmentOutlined /> {m.lat.toFixed(2)}, {m.lng.toFixed(2)}{" "}
+                  • <ClockCircleOutlined /> today
                 </span>
               </div>
             </div>

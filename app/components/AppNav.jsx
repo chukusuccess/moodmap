@@ -10,6 +10,7 @@ const AppNavbar = () => {
   const toggleDrawer = () => setOpen(!open);
 
   const navLinks = [
+    { label: "Home", path: "/" },
     { label: "See Mood History", path: "/home/history" },
     { label: "About", path: "/" },
   ];

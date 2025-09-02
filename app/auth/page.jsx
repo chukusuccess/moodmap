@@ -4,6 +4,7 @@ import { Form, Input, Button, Typography, message } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { AuthService } from "../services/auth.service";
 
 const { Title, Text, Link } = Typography;
 
@@ -12,13 +13,46 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
-
   const router = useRouter();
 
   const toggleMode = () => setIsSignUp(!isSignUp);
 
-  const onFinish = (values) => {
-    return;
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      if (isSignUp) {
+        // 1. Create user
+        await AuthService.createUser({
+          email: values.email,
+          password: values.password,
+          fullName: values.name,
+        });
+
+        // 2. Auto-login after signup
+        await AuthService.login({
+          email: values.email,
+          password: values.password,
+        });
+
+        messageApi.success("Account created! Redirecting...");
+      } else {
+        // Sign in
+        await AuthService.login({
+          email: values.email,
+          password: values.password,
+        });
+
+        messageApi.success("Welcome back!");
+      }
+
+      // Redirect to history page
+      router.push("/home/history");
+    } catch (err) {
+      console.error("Auth error:", err);
+      messageApi.error(err.message || "Authentication failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

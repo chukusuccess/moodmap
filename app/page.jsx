@@ -13,6 +13,7 @@ import Honeycomb from "./components/EmojiGrid";
 const MoodMap = dynamic(() => import("./components/MoodMap"), { ssr: false });
 
 export default function Home() {
+  const [panTo, setPanTo] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
@@ -25,13 +26,13 @@ export default function Home() {
             <LeftSideBar />
           </div>
           <div className="sm:flex-1/5 flex-1 w-full sm:w-fit p-4 boarder border-[#27272a] border-[10px] rounded-[70px] bg-black">
-            <Honeycomb count={36} />
+            {/* <Honeycomb count={36} /> this sleek ui to be implemented later. */}
           </div>
           <div className="rounded-2xl bg-white sm:flex-3/5 flex-1 w-full aspect-square sm:aspect-auto sm:w-fit sm:h-full">
-            <MoodMap />
+            <MoodMap setPanTo={setPanTo} />
           </div>
           <div className="sm:flex-1/5 flex-1 w-full sm:w-fit">
-            <RightSideBar />
+            <RightSideBar onPanTo={panTo} />
           </div>
         </div>
       </div>

@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useEffect, useState, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { MoodService } from "../services/mood.service";
 
-// Fix Leaflet’s default marker issue in React/Next
+// Fix Leaflet markers in React/Next
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -13,51 +14,36 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Dummy mood data
-const moods = [
-  {
-    id: 1,
-    emoji: "😀",
-    text: "Feeling great!",
-    lat: 6.5244,
-    lng: 3.3792,
-    location: "Lagos",
-  },
-  {
-    id: 2,
-    emoji: "😢",
-    text: "Tired after work",
-    lat: 52.52,
-    lng: 13.405,
-    location: "Berlin",
-  },
-  {
-    id: 3,
-    emoji: "🤩",
-    text: "Excited for tomorrow!",
-    lat: 40.7128,
-    lng: -74.006,
-    location: "NYC",
-  },
-];
-
-// 🔑 Utility: cleanup map on unmount
-function ResetOnUnmount() {
-  const map = useMap();
-  useEffect(() => {
-    return () => {
-      map.remove();
-    };
-  }, [map]);
-  return null;
-}
-
-export default function MoodMap() {
+export default function MoodMap({ setPanTo }) {
   const [mounted, setMounted] = useState(false);
+  const [moods, setMoods] = useState([]);
+  const mapRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
+
+    // 1. Load today's moods
+    MoodService.getTodayMoods().then((res) => {
+      setMoods(res.documents);
+    });
+
+    // 2. Subscribe to new moods
+    const unsubscribe = MoodService.subscribeToMoods((newMood) => {
+      setMoods((prev) => [...prev, newMood]);
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  // ⚡ Expose panTo once map is created (TODO: FIX. doesn't work well)
+  const handleMapCreated = (mapInstance) => {
+    mapRef.current = mapInstance;
+    if (setPanTo) {
+      setPanTo((coords) => {
+        mapInstance.setView(coords, 6, { animate: true });
+      });
+    }
+  };
 
   if (!mounted)
     return <div className="w-full h-full bg-gray-100 rounded-2xl" />;
@@ -70,9 +56,8 @@ export default function MoodMap() {
         zoom={2}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%" }}
+        whenCreated={handleMapCreated} // ✅ capture map instance
       >
-        <ResetOnUnmount />
-
         {/* Background tiles */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -81,14 +66,11 @@ export default function MoodMap() {
 
         {/* Mood pins */}
         {moods.map((m) => (
-          <Marker key={m.id} position={[m.lat, m.lng]}>
+          <Marker key={m.$id} position={[m.lat, m.lng]}>
             <Popup>
               <div className="flex flex-col">
                 <span className="text-xl">{m.emoji}</span>
                 {m.text && <span className="text-sm">{m.text}</span>}
-                {m.location && (
-                  <span className="text-xs text-gray-500">{m.location}</span>
-                )}
               </div>
             </Popup>
           </Marker>
