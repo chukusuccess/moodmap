@@ -49,8 +49,13 @@ export const LeftSideBar = () => {
   const [share, setShare] = useState(false);
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [currentUserId, setCurrentUserId] = useState(null);
 
-  const currentUserId = localStorage.getItem("cuid");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUserId(localStorage.getItem("cuid"));
+    }
+  }, []);
 
   const handleSubmit = async (values) => {
     if (!selectedEmoji) return;

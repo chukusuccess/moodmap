@@ -17,7 +17,13 @@ export default function History() {
   const [loading, setLoading] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const currentUserId = localStorage.getItem("cuid");
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUserId(localStorage.getItem("cuid"));
+    }
+  }, []);
 
   const router = useRouter();
   const { logout } = useAuth();
