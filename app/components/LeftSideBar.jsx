@@ -23,12 +23,14 @@ export const LeftSideBar = () => {
       className={`w-full sm:h-full
        p-4 rounded-2xl bg-white shadow-lg flex flex-col`}
     >
-      <h2
+      <motion.h2
+        whileHover={{ scale: 1.2 }}
+        whileTap={{ scale: 0.8 }}
         onClick={() => setShare((prev) => !prev)}
         className="text-lg font-semibold mb-4 transition-all ease-in-out duration-200"
       >
         Share Your Mood
-      </h2>
+      </motion.h2>
       <AnimatePresence>
         {share && (
           <motion.div
@@ -46,7 +48,9 @@ export const LeftSideBar = () => {
               {/* Emoji grid */}
               <div className="grid grid-cols-8 gap-2 mb-4">
                 {emojiOptions.map((emoji) => (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.8 }}
                     key={emoji}
                     type="button"
                     className={`text-xl p-1 rounded-lg border flex items-center justify-center ${
@@ -57,7 +61,7 @@ export const LeftSideBar = () => {
                     onClick={() => setSelectedEmoji(emoji)}
                   >
                     {emoji}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 
@@ -75,14 +79,20 @@ export const LeftSideBar = () => {
 
               {/* Submit button */}
               <Form.Item className="mt-auto">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  block
-                  disabled={!selectedEmoji}
+                <motion.div
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.8 }}
                 >
-                  Post Mood
-                </Button>
+                  <Button
+                    type="primary"
+                    size="large"
+                    htmlType="submit"
+                    block
+                    disabled={!selectedEmoji}
+                  >
+                    Post Mood
+                  </Button>
+                </motion.div>
               </Form.Item>
             </Form>
           </motion.div>

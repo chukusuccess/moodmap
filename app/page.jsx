@@ -8,6 +8,7 @@ import { LeftSideBar } from "./components/LeftSideBar";
 import { RightSideBar } from "./components/RightSideBar";
 
 import dynamic from "next/dynamic";
+import Honeycomb from "./components/EmojiGrid";
 
 const MoodMap = dynamic(() => import("./components/MoodMap"), { ssr: false });
 
@@ -22,6 +23,9 @@ export default function Home() {
         <div className="w-full h-fit sm:h-[80vh] flex flex-col sm:flex-row sm:items-start sm:justify-start gap-4 noscroll">
           <div className="sm:flex-1/5 flex-1 w-full sm:w-fit">
             <LeftSideBar />
+          </div>
+          <div className="sm:flex-1/5 flex-1 w-full sm:w-fit p-4 boarder border-[#27272a] border-[10px] rounded-[70px] bg-black">
+            <Honeycomb count={36} />
           </div>
           <div className="rounded-2xl bg-white sm:flex-3/5 flex-1 w-full aspect-square sm:aspect-auto sm:w-fit sm:h-full">
             <MoodMap />
