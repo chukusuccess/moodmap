@@ -1,6 +1,6 @@
 "use client";
 import { Form, Input, Button, message } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MoodService } from "../services/mood.service";
 
