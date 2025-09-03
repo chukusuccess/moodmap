@@ -75,16 +75,21 @@ export default function MoodMap({ setPanTo }) {
         /> */}
 
         {/* Mood pins */}
-        {moods.map((m) => (
-          <Marker key={m?.$id} position={[m?.lat, m?.lng]}>
-            <Popup>
-              <div className="flex flex-col">
-                <span className="text-xl">{m?.emoji}</span>
-                {m?.text && <span className="text-sm">{m?.text}</span>}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {moods.length > 0 &&
+          moods
+            .filter(
+              (m) => typeof m.lat === "number" && typeof m.lng === "number"
+            )
+            .map((m) => (
+              <Marker key={m.$id} position={[m.lat, m.lng]}>
+                <Popup>
+                  <div className="flex flex-col">
+                    <span className="text-xl">{m.emoji}</span>
+                    {m.text && <span className="text-sm">{m.text}</span>}
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
       </MapContainer>
     </div>
   );
