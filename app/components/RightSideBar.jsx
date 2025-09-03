@@ -109,18 +109,18 @@ export const RightSideBar = ({ onPanTo }) => {
         <div className="flex flex-col gap-2 mt-2">
           {recentMoods.map((m) => (
             <div
-              key={m.$id}
-              onClick={() => onPanTo?.([m.lat, m.lng])} // ✅ Pan to mood location
+              key={m?.$id}
+              onClick={() => onPanTo?.([m?.lat, m?.lng])} // ✅ Pan to mood location
               className="flex items-center gap-3 rounded-lg border border-gray-200 hover:border-blue-500 p-2 cursor-pointer"
             >
-              <span className="text-xl">{m.emoji}</span>
+              <span className="text-xl">{m?.emoji}</span>
               <div className="flex flex-col">
-                {m.text && (
-                  <span className="text-sm text-gray-800">{m.text}</span>
+                {m?.text && (
+                  <span className="text-sm text-gray-800">{m?.text}</span>
                 )}
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <EnvironmentOutlined /> {m.lat?.toFixed(2)},{" "}
-                  {m.lng?.toFixed(2)} • <ClockCircleOutlined /> today
+                  <EnvironmentOutlined /> {m?.lat?.toFixed(2)},{" "}
+                  {m?.lng?.toFixed(2)} • <ClockCircleOutlined /> today
                 </span>
               </div>
             </div>
