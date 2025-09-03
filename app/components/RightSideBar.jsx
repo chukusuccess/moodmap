@@ -107,28 +107,24 @@ export const RightSideBar = ({ onPanTo }) => {
         <h2 className="text-lg font-semibold">Live Mood Feed</h2>
         <span className="text-xs">{recentMoods.length} moods shared today</span>
         <div className="flex flex-col gap-2 mt-2">
-          {recentMoods
-            .filter(
-              (m) => typeof m.lat === "number" && typeof m.lng === "number"
-            )
-            .map((m) => (
-              <div
-                key={m?.$id}
-                onClick={() => onPanTo?.([m?.lat, m?.lng])} // ✅ Pan to mood location
-                className="flex items-center gap-3 rounded-lg border border-gray-200 hover:border-blue-500 p-2 cursor-pointer"
-              >
-                <span className="text-xl">{m?.emoji}</span>
-                <div className="flex flex-col">
-                  {m?.text && (
-                    <span className="text-sm text-gray-800">{m?.text}</span>
-                  )}
-                  <span className="text-xs text-gray-500 flex items-center gap-1">
-                    <EnvironmentOutlined /> {m?.lat?.toFixed(2)},{" "}
-                    {m?.lng?.toFixed(2)} • <ClockCircleOutlined /> today
-                  </span>
-                </div>
+          {recentMoods.map((m) => (
+            <div
+              key={m?.$id}
+              onClick={() => onPanTo?.([m?.lat, m?.lng])} // ✅ Pan to mood location
+              className="flex items-center gap-3 rounded-lg border border-gray-200 hover:border-blue-500 p-2 cursor-pointer"
+            >
+              <span className="text-xl">{m?.emoji}</span>
+              <div className="flex flex-col">
+                {m?.text && (
+                  <span className="text-sm text-gray-800">{m?.text}</span>
+                )}
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <EnvironmentOutlined /> {m?.lat?.toFixed(2)},{" "}
+                  {m?.lng?.toFixed(2)} • <ClockCircleOutlined /> today
+                </span>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </Card>
     </div>

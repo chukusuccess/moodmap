@@ -53,7 +53,7 @@ export default function MoodMap({ setPanTo }) {
       <MapContainer
         key="mood-map"
         center={[20, 0]} // world view
-        zoom={2}
+        zoom={3}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%" }}
         whenCreated={handleMapCreated} // ✅ capture map instance
