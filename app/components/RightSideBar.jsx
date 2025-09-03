@@ -119,8 +119,8 @@ export const RightSideBar = ({ onPanTo }) => {
                   <span className="text-sm text-gray-800">{m.text}</span>
                 )}
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <EnvironmentOutlined /> {m.lat.toFixed(2)}, {m.lng.toFixed(2)}{" "}
-                  • <ClockCircleOutlined /> today
+                  <EnvironmentOutlined /> {m.lat?.toFixed(2)},{" "}
+                  {m.lng?.toFixed(2)} • <ClockCircleOutlined /> today
                 </span>
               </div>
             </div>
