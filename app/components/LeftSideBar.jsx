@@ -119,7 +119,6 @@ export const LeftSideBar = () => {
       {contextHolder}
 
       <motion.h2
-        whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.8 }}
         onClick={() => setShare((prev) => !prev)}
         className="text-lg font-semibold mb-4 transition-all ease-in-out duration-200 cursor-pointer"

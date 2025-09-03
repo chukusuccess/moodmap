@@ -25,10 +25,16 @@ export default function Home() {
           <div className="sm:flex-1/5 flex-1 w-full sm:w-fit">
             <LeftSideBar />
           </div>
-          <div className="sm:flex-1/5 flex-1 w-full sm:w-fit p-4 boarder border-[#27272a] border-[10px] rounded-[70px] bg-black">
-            {/* <Honeycomb count={36} /> this sleek ui to be implemented later. */}
-          </div>
-          <div className="rounded-2xl bg-white sm:flex-3/5 flex-1 w-full aspect-square sm:aspect-auto sm:w-fit sm:h-full">
+          {/* <div className="sm:flex-1/5 flex-1 w-fit sm:w-fit p-4 boarder border-[#27272a] border-[4px] rounded-[70px] bg-radial scale-75 from-[#27272a] from-50% via-[#161616] to-[#000]">
+            <Honeycomb count={36} />
+          </div> */}
+          <div className="rounded-2xl bg-white sm:flex-3/5 flex-1 w-full aspect-square sm:aspect-auto sm:w-fit sm:h-full relative">
+            {/* <div
+              onClick={() => console.log("clicked float button on map")}
+              className="absolute z-[9999] top-52 left-52 bg-white rounded-full py-2 px-4"
+            >
+              here
+            </div> */}
             <MoodMap setPanTo={setPanTo} />
           </div>
           <div className="sm:flex-1/5 flex-1 w-full sm:w-fit">

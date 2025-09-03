@@ -54,8 +54,8 @@ const IconWithDynamicScale = ({ index, x, y }) => {
     if (!iconRef.current) return 1;
 
     const rect = iconRef.current.getBoundingClientRect();
-    const iconCenterX = rect.left + rect.width / 2;
-    const iconCenterY = rect.top + rect.height / 2;
+    const iconCenterX = rect.left + rect.width / 3;
+    const iconCenterY = rect.top + rect.height / 3;
 
     const watchface = document.getElementById("watchface");
     if (!watchface) return 1;
@@ -93,12 +93,14 @@ const IconWithDynamicScale = ({ index, x, y }) => {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.2 }}
+      // whileHover={{ scale: 1.2 }}
       whileTap={{ scale: 0.8 }}
       ref={iconRef}
       id={`icon-${index + 1}`}
       style={{ scale: distance }}
-      className={`icon ${isOffsetRow ? "offset" : ""}`}
+      className={`icon bg-radial-[at_25%_25%] from-white via-blue-100 to-zinc-400 to-75% ${
+        isOffsetRow ? "offset" : ""
+      }`}
     >
       {moods[index]}
     </motion.div>
@@ -118,10 +120,10 @@ export default function Honeycomb({ count = 36 }) {
         id="draggablegrid"
         drag
         dragConstraints={{
-          left: -280,
-          right: 280,
-          top: -180,
-          bottom: 180,
+          left: -180,
+          right: 180,
+          top: -80,
+          bottom: 80,
         }}
         style={{ x, y }}
         className="draggable-grid"
