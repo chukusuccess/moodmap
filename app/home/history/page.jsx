@@ -64,7 +64,7 @@ export default function History() {
       <Search
         variant="filled"
         size="large"
-        className="w-full bg-white rounded-md subtle-shadow"
+        className="w-full bg-[#ffffff60] backdrop-blur-xl rounded-md subtle-shadow"
         placeholder="Search your mood history..."
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: 16 }}
@@ -73,7 +73,13 @@ export default function History() {
 
       <div className="flex flex-col gap-3">
         {filtered.length === 0 ? (
-          <Empty description="No moods yet. Share your first mood!" />
+          <Empty
+            description={
+              <span className="text-[#ededf0] opacity-50">
+                No moods yet. Share your first mood!
+              </span>
+            }
+          />
         ) : (
           filtered.map((m) => (
             <motion.div
@@ -83,15 +89,19 @@ export default function History() {
             >
               <Card
                 size="small"
-                className="rounded-lg shadow hover:shadow-md transition"
+                variant="borderless"
+                style={{
+                  background: "#19191c",
+                  color: "#ededf0",
+                  borderRadius: "0.75rem",
+                  padding: 6,
+                }}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{m.emoji}</span>
                   <div className="flex flex-col">
-                    <span className="text-sm text-gray-800">
-                      {m.text || "No caption"}
-                    </span>
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                    <span className="text-sm">{m.text || "No caption"}</span>
+                    <span className="text-xs flex items-center gap-1 opacity-50">
                       <ClockCircleOutlined />{" "}
                       {dayjs(m.$createdAt).format("MMM D, YYYY h:mm A")}
                     </span>

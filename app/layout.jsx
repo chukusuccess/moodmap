@@ -16,7 +16,7 @@ import { Suspense } from "react";
 import { Spin } from "antd";
 import AppNavbar from "./components/AppNav";
 
-const lexend = Lexend({
+export const lexend = Lexend({
   subsets: ["latin", "latin-ext", "vietnamese"],
 });
 

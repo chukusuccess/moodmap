@@ -1,18 +1,17 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import { MoodService } from "../services/mood.service";
+import { lexend } from "../layout";
+import { moodCategories } from "../resources/constants";
+import dayjs from "dayjs";
 
-// Fix Leaflet markers in React/Next
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-});
+// helper: find category by emoji
+const getCategoryForEmoji = (emoji) =>
+  moodCategories.find((cat) =>
+    cat.emojis.some((item) => item.emoji === emoji)
+  ) || null;
 
 export default function MoodMap({ setPanTo }) {
   const [mounted, setMounted] = useState(false);
@@ -35,7 +34,6 @@ export default function MoodMap({ setPanTo }) {
     return () => unsubscribe();
   }, []);
 
-  // ⚡ Expose panTo once map is created (TODO: FIX. doesn't work well)
   const handleMapCreated = (mapInstance) => {
     mapRef.current = mapInstance;
     if (setPanTo) {
@@ -49,47 +47,75 @@ export default function MoodMap({ setPanTo }) {
     return <div className="w-full h-full bg-gray-100 rounded-2xl" />;
 
   return (
-    <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg">
+    <div className="w-full h-full rounded-xl overflow-hidden shadow-lg">
       <MapContainer
         key="mood-map"
-        center={[20, 0]} // world view
-        zoom={3}
+        center={[20, 0]}
+        zoom={2}
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%" }}
-        whenCreated={handleMapCreated} // ✅ capture map instance
+        whenCreated={handleMapCreated}
       >
-        {/* Background tiles */}
-        <TileLayer
-          url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
-          subdomains="abcd"
-          maxZoom={20}
-        />
-
         {/* Dark tile layer */}
-        {/* <TileLayer
+        <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
           subdomains="abcd"
-          maxZoom={20}
-        /> */}
+          maxZoom={6}
+          minZoom={1}
+        />
+
+        {/* white tile layer */}
+        {/* <TileLayer
+//           url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+//           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
+//           subdomains="abcd"
+//           maxZoom={6}
+//           minZoom={1}
+//         /> */}
 
         {/* Mood pins */}
-        {moods.length > 0 &&
-          moods
-            .filter(
-              (m) => typeof m.lat === "number" && typeof m.lng === "number"
-            )
-            .map((m) => (
-              <Marker key={m.$id} position={[m.lat, m.lng]}>
+        {moods
+          .filter((m) => typeof m.lat === "number" && typeof m.lng === "number")
+          .map((m) => {
+            const cat = getCategoryForEmoji(m.emoji);
+            const color = cat ? cat.hex : "#888";
+
+            return (
+              <CircleMarker
+                key={m.$id}
+                center={[m.lat, m.lng]}
+                pathOptions={{
+                  radius: 8,
+                  fillColor: color,
+                  fillOpacity: 0.7,
+                  color: color,
+                  weight: 2,
+                }}
+              >
                 <Popup>
-                  <div className="flex flex-col">
-                    <span className="text-xl">{m.emoji}</span>
-                    {m.text && <span className="text-sm">{m.text}</span>}
+                  <div
+                    className={`${lexend.className} flex flex-col items-center p-2`}
+                  >
+                    <span className="text-2xl">{m.emoji}</span>
+                    {cat && (
+                      <span className="text-sm font-semibold mt-2">
+                        {cat.name}
+                      </span>
+                    )}
+                    {m.text && (
+                      <span className="text-xs  opacity-50">{m.text}</span>
+                    )}
+                    {m.$createdAt && (
+                      <span className="text-xs  opacity-50 mt-2">
+                        {dayjs(m.$createdAt).format("MMM D, YYYY h:mm A")}
+                      </span>
+                    )}
                   </div>
                 </Popup>
-              </Marker>
-            ))}
+              </CircleMarker>
+            );
+          })}
       </MapContainer>
     </div>
   );

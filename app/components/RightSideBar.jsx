@@ -45,19 +45,29 @@ export const RightSideBar = ({ onPanTo }) => {
   }, []);
 
   return (
-    <div className="w-full h-full p-4 rounded-2xl bg-white shadow-lg flex flex-col gap-4">
+    <div className="w-full h-full p-4 rounded-xl bg-[#000] shadow-lg flex flex-col gap-4">
       {/* Mood of the Day */}
-      <Card size="small" className="rounded-xl shadow">
-        <h2 className="text-lg font-semibold mb-2">Mood of the Day</h2>
+      <Card
+        style={{
+          backgroundImage: "linear-gradient(to left, #19191c, #0077be)",
+          // borderLeft: "8px dashed #ffc40c",
+          color: "#ededf0",
+          borderRadius: "0.75rem",
+          padding: 4,
+        }}
+        variant="borderless"
+        size="small"
+      >
         {moodOfDay ? (
-          <div className="flex flex-col gap-2 text-2xl w-full">
-            <span className="flex items-center text-center">
-              {moodOfDay.emoji}
-              <span className="ml-2 text-base">Most felt</span>
-            </span>
-            <span className="text-xs text-gray-600">
-              {moodOfDay.count} people feeling this way today
-            </span>
+          <div className="flex items-center gap-2">
+            <span className="animate-bounce text-4xl">{moodOfDay?.emoji}</span>
+            <div className="flex flex-col text-2xl w-full">
+              <h2 className="text-lg font-semibold mb-2">Mood of the Day</h2>
+              <span className="text-xs">
+                {moodOfDay.count} {moodOfDay.count > 1 ? "people" : "person"}{" "}
+                feeling this way today
+              </span>
+            </div>
           </div>
         ) : (
           <span className="text-sm text-gray-500">No moods shared yet</span>
@@ -66,11 +76,16 @@ export const RightSideBar = ({ onPanTo }) => {
 
       {/* Global Distribution */}
       <Card
-        size="small"
+        style={{
+          background: "#19191c",
+          color: "#ededf0",
+          borderRadius: "0.75rem",
+        }}
+        variant="borderless"
         className="rounded-xl shadow flex flex-col items-center"
       >
         <h2 className="text-lg font-semibold mb-2">
-          <RiseOutlined /> Global Distribution
+          <RiseOutlined /> Global Mood Distribution
         </h2>
         <div className="w-full h-48">
           <ResponsiveContainer>
@@ -103,7 +118,17 @@ export const RightSideBar = ({ onPanTo }) => {
       </Card>
 
       {/* Live Mood Feed */}
-      <Card size="small" className="rounded-xl shadow flex-1 overflow-y-auto">
+      <Card
+        style={{
+          background: "#19191c",
+          color: "#ededf0",
+          borderRadius: "0.75rem",
+          padding: 6,
+        }}
+        variant="borderless"
+        size="small"
+        className="rounded-xl shadow flex-1 overflow-y-auto noscroll"
+      >
         <h2 className="text-lg font-semibold">Live Mood Feed</h2>
         <span className="text-xs">{recentMoods.length} moods shared today</span>
         <div className="flex flex-col gap-2 mt-2">
@@ -119,7 +144,7 @@ export const RightSideBar = ({ onPanTo }) => {
                   <span className="text-sm text-gray-800">{m?.text}</span>
                 )}
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  <EnvironmentOutlined /> {m?.lat?.toFixed(2)},{" "}
+                  <EnvironmentOutlined /> {m?.lat?.toFixed(2)}{" "}
                   {m?.lng?.toFixed(2)} • <ClockCircleOutlined /> today
                 </span>
               </div>
