@@ -45,10 +45,10 @@ export const loversQuarrel = Lovers_Quarrel({
   weight: ["400"],
 });
 
-export const metadata = {
-  title: "Mood Map",
-  description: "Global mood distribution across the globe daily.",
-};
+// export const metadata = {
+//   title: "Mood Map",
+//   description: "Global mood distribution across the globe daily.",
+// };
 
 export default function RootLayout({ children }) {
   return (
