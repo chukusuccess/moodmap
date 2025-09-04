@@ -100,14 +100,14 @@ export default function MoodMap({ setPanTo }) {
                     <span className="text-2xl">{m.emoji}</span>
                     {cat && (
                       <span className="text-sm font-semibold mt-2">
-                        {cat.name}
+                        {cat.emojis.find((e) => e.emoji === m.emoji)?.label}
                       </span>
                     )}
                     {m.text && (
-                      <span className="text-xs  opacity-50">{m.text}</span>
+                      <span className="text-xs opacity-50">{m.text}</span>
                     )}
                     {m.$createdAt && (
-                      <span className="text-xs  opacity-50 mt-2">
+                      <span className="text-xs opacity-50 mt-2">
                         {dayjs(m.$createdAt).format("MMM D, YYYY h:mm A")}
                       </span>
                     )}

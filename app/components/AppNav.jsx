@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { MenuOutlined, CloseOutlined, GlobalOutlined } from "@ant-design/icons";
+import {
+  MenuOutlined,
+  CloseOutlined,
+  GlobalOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
 import { Drawer, Button, Divider } from "antd";
 
 const AppNavbar = () => {
@@ -12,13 +17,13 @@ const AppNavbar = () => {
   const navLinks = [
     { label: "Home", path: "/" },
     { label: "See Mood History", path: "/home/history" },
-    { label: "About", path: "/about" },
+    { label: "About", path: "/" },
   ];
 
   return (
     <header className="w-full fixed top-0 z-[99999] px-6 py-3 subtle-shadow bg-[#000] text-[#fd356e] flex items-center justify-between">
       <Link href="/" className="text-xl font-semibold flex items-center gap-2">
-        <GlobalOutlined className="text-4xl" />{" "}
+        <SmileOutlined className="text-4xl animate-pulse" />{" "}
         <div className="flex flex-col">
           <span>Global Mood Map</span>
           <span className="text-xs opacity-80 font-light text-[#c3c3c6]">

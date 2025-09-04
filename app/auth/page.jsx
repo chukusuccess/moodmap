@@ -6,7 +6,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { AuthService } from "../services/auth.service";
 
-const { Title, Text, Link } = Typography;
+const { Title, Link } = Typography;
 
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -56,9 +56,9 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="h-[80vh] flex flex-col items-center justify-center bg-gray-100 px-4 w-full">
+    <div className="max-h-screen h-screen noscroll bg-[#19191c] flex flex-col items-center justify-center px-4 w-full">
       {contextHolder}
-      <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-md">
+      <div className="bg-black shadow-md rounded-xl p-8 w-full max-w-md">
         <Title level={3} className="text-center mb-6">
           {isSignUp ? "Create Account" : "Welcome Back"}
         </Title>
@@ -70,6 +70,7 @@ const AuthPage = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.3 }}
+            className="text-[#c3c3c6]"
           >
             <Form
               size="large"
@@ -80,7 +81,7 @@ const AuthPage = () => {
               {isSignUp && (
                 <Form.Item
                   name="name"
-                  label="Name"
+                  label={<span className="text-[#c3c3c6]">Name</span>}
                   rules={[
                     { required: true, message: "Please enter your name" },
                   ]}
@@ -91,7 +92,7 @@ const AuthPage = () => {
 
               <Form.Item
                 name="email"
-                label="Email"
+                label={<span className="text-[#c3c3c6]">Email</span>}
                 rules={[
                   { required: true, message: "Please enter your email" },
                   { type: "email", message: "Enter a valid email" },
@@ -102,7 +103,7 @@ const AuthPage = () => {
 
               <Form.Item
                 name="password"
-                label="Password"
+                label={<span className="text-[#c3c3c6]">Password</span>}
                 rules={[
                   { required: true, message: "Please enter your password" },
                 ]}
@@ -129,14 +130,14 @@ const AuthPage = () => {
             </Form>
 
             <div className="text-center mt-4">
-              <Text>
+              <span className="text-[#c3c3c6]">
                 {isSignUp
                   ? "Already have an account?"
                   : "Don't have an account?"}{" "}
                 <Link onClick={toggleMode}>
                   {isSignUp ? "Sign In" : "Sign Up"}
                 </Link>
-              </Text>
+              </span>
             </div>
           </motion.div>
         </AnimatePresence>

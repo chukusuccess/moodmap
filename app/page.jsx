@@ -8,18 +8,9 @@ import { EnvironmentOutlined } from "@ant-design/icons";
 import Splash from "./components/Splash";
 import { RightSideBar } from "./components/RightSideBar";
 import { MoodService } from "./services/mood.service";
-import { moodCategories } from "./resources/constants";
+import { emojiOptions, colors } from "./resources/constants";
 
 const MoodMap = dynamic(() => import("./components/MoodMap"), { ssr: false });
-
-export const emojiOptions = moodCategories.flatMap((cat) =>
-  cat.emojis.map((e) => e.emoji)
-);
-
-export const colors = moodCategories.map((cat) => ({
-  name: cat.name,
-  hex: cat.color,
-}));
 
 export default function Home() {
   const [panTo, setPanTo] = useState(null);
@@ -193,7 +184,7 @@ export default function Home() {
                 )}
               </AnimatePresence>
             </div>
-            <div className="absolute z-[999] flex sm:flex-col flex-row bottom-5 sm:bottom-auto sm:top-52 sm:right-3 bg-[#f5f5f520] backdrop-blur-xl rounded-full sm:py-2 py-1 sm:px-1 px-2 sm:space-y-2 place-self-center space-x-2 sm:space-x-0">
+            <div className="absolute z-[999] flex sm:flex-col flex-row bottom-5 sm:bottom-auto sm:top-52 sm:left-3 bg-[#f5f5f520] backdrop-blur-xl rounded-full sm:py-2 py-1 sm:px-1 px-2 sm:space-y-2 place-self-center space-x-2 sm:space-x-0">
               {colors.map((item, index) => {
                 return (
                   <Tooltip
@@ -201,9 +192,7 @@ export default function Home() {
                     title={item.name}
                     key={index}
                   >
-                    <div
-                      className={`sm:w-6 sm:h-6 w-4 h-4 rounded-full ${item.hex}`}
-                    ></div>
+                    <div className={`w-6 h-6 rounded-full ${item.hex}`}></div>
                   </Tooltip>
                 );
               })}

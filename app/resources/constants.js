@@ -84,3 +84,12 @@ export const moodCategories = [
     ],
   },
 ];
+
+export const emojiOptions = moodCategories.flatMap((cat) =>
+  cat.emojis.map((e) => e.emoji)
+);
+
+export const colors = moodCategories.map((cat) => ({
+  name: cat.name,
+  hex: cat.color,
+}));
