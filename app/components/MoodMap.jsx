@@ -55,15 +55,37 @@ export default function MoodMap({ setPanTo }) {
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100%" }}
         whenCreated={handleMapCreated}
+        attributionControl={false}
       >
         {/* Dark tile layer */}
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
+          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
           subdomains="abcd"
           maxZoom={6}
           minZoom={1}
         />
+        {/* ✅ Custom Attribution */}
+        <div className="absolute bottom-1 right-2 text-[10px] text-gray-400 opacity-70 pointer-events-none z-[1000] ">
+          ©{" "}
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            OpenStreetMap
+          </a>{" "}
+          contributors |{" "}
+          <a
+            href="https://www.carto.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            CARTO
+          </a>
+        </div>
 
         {/* white tile layer */}
         {/* <TileLayer
