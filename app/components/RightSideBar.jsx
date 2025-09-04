@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, Modal } from "antd";
 import { motion } from "framer-motion";
 import {
@@ -32,6 +32,33 @@ export const RightSideBar = ({ onPanTo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
   const [selectedPercentage, setSelectedPercentage] = useState(null);
+
+  // fast emoji -> category index map once
+  const emojiToCatIndex = useMemo(() => {
+    const map = {};
+    moodCategories.forEach((cat, idx) => {
+      cat.emojis.forEach(({ emoji }) => {
+        map[emoji] = idx;
+      });
+    });
+    return map;
+  }, []);
+
+  // Aggregate emoji counts into category totals
+  const categoryAgg = useMemo(() => {
+    const totals = new Array(moodCategories.length).fill(0);
+    distribution.forEach(({ emoji, count }) => {
+      const idx = emojiToCatIndex[emoji];
+      if (idx !== undefined) totals[idx] += count;
+    });
+    const totalAll = totals.reduce((a, b) => a + b, 0);
+
+    return moodCategories.map((cat, idx) => ({
+      cat,
+      count: totals[idx],
+      pct: totalAll ? Math.round((totals[idx] / totalAll) * 100) : 0,
+    }));
+  }, [distribution, emojiToCatIndex]);
 
   const showModal = (percentage, cat) => {
     setSelectedCat(cat);
@@ -76,8 +103,12 @@ export const RightSideBar = ({ onPanTo }) => {
       {/* Mood of the Day */}
       <Card
         style={{
-          background: getCategoryForEmoji(moodOfDay?.emoji)?.hex || "#19191c",
-          // borderLeft: "8px dashed #ffc40c",
+          // background: getCategoryForEmoji(moodOfDay?.emoji)?.hex || "#19191c",
+          background: "#19191c",
+          borderLeft: `2px solid ${getCategoryForEmoji(moodOfDay?.emoji)?.hex}`,
+          borderRight: `2px solid ${
+            getCategoryForEmoji(moodOfDay?.emoji)?.hex
+          }`,
           color: "#ededf0",
           borderRadius: "0.75rem",
           padding: 4,
@@ -118,24 +149,19 @@ export const RightSideBar = ({ onPanTo }) => {
         </h2>
 
         <div className="grid grid-cols-3 gap-4 w-full">
-          {distribution.map((d, index) => {
-            const cat = getCategoryForEmoji(d.emoji);
-            const total = distribution.reduce((sum, x) => sum + x.count, 0);
-            const percentage =
-              total > 0 ? Math.round((d.count / total) * 100) : 0;
-
+          {categoryAgg.map((d, index) => {
             return (
               <motion.div
                 whileTap={{ scale: 0.8 }}
                 key={index}
                 className="w-16 h-16 rounded-full flex flex-col items-center justify-center"
-                style={{ backgroundColor: cat?.hex || "#444" }}
-                onClick={() => showModal(percentage, cat)}
+                style={{ backgroundColor: "#000" }}
+                onClick={() => showModal(d.pct, d.cat)}
               >
                 <div
-                  className={`w-12 h-12 flex items-center justify-center bg-[#00000030] rounded-full text-sm font-semibold`}
+                  className={`w-12 h-12 flex items-center justify-center rounded-full text-sm font-semibold`}
                 >
-                  {percentage}%
+                  {d.pct}%
                 </div>
               </motion.div>
             );
@@ -157,7 +183,7 @@ export const RightSideBar = ({ onPanTo }) => {
       >
         <h2 className="text-lg font-semibold">Live Mood Feed</h2>
         <span className="text-xs">
-          {recentMoods.length} {recentMoods.length > 1 ? "people" : "person"}{" "}
+          {recentMoods.length} {recentMoods.length === 1 ? "person" : "people"}{" "}
           shared their mood today
         </span>
         <div className="flex flex-col gap-2 mt-2">
@@ -201,12 +227,7 @@ export const RightSideBar = ({ onPanTo }) => {
         }}
       >
         {selectedCat && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col items-center justify-center p-6 gap-3"
-          >
+          <div className="flex flex-col items-center justify-center p-6 gap-3">
             {/* All emojis in category */}
             <div className="flex items-center gap-3 text-2xl">
               {selectedCat.emojis.map((e, idx) => (
@@ -222,14 +243,14 @@ export const RightSideBar = ({ onPanTo }) => {
             {/* Percentage + category name */}
             <div className="text-center text-xs sm:text-base bg-[#00000020] rounded-lg px-3 py-2">
               <span className="opacity-80">
-                {selectedPercentage}% of people who shared their mood today are
-                feeling <br />
+                <span className="font-semibold">{selectedPercentage}%</span> of
+                people who shared their mood today are feeling <br />
               </span>
               <span className="font-semibold text-sm sm:text-xl">
                 {selectedCat.name}
               </span>
             </div>
-          </motion.div>
+          </div>
         )}
       </Modal>
     </div>

@@ -13107,7 +13107,7 @@ function SplashText() {
           </svg>
         </div>
       </div>
-      <span className="uppercase font-bold text-2xl">MOODMAP</span>
+      <span className="uppercase font-bold text-2xl">GLOBAL MOOD MAP</span>
     </motion.div>
   );
 }

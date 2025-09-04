@@ -25,7 +25,7 @@ const AppNavbar = () => {
       <Link href="/" className="text-xl font-semibold flex items-center gap-2">
         <SmileOutlined className="text-4xl animate-pulse" />{" "}
         <div className="flex flex-col">
-          <span>Global Mood Map</span>
+          <span>Moodly</span>
           <span className="text-xs opacity-80 font-light text-[#c3c3c6]">
             Real-time emotions worldwide ✨
           </span>

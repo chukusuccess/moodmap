@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { Form, Input, Button, message, Tooltip } from "antd";
-import { EnvironmentOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import Splash from "./components/Splash";
 import { RightSideBar } from "./components/RightSideBar";
 import { MoodService } from "./services/mood.service";
@@ -21,6 +21,23 @@ export default function Home() {
   const [currentUserId, setCurrentUserId] = useState(null);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  // helper: get IP based approximate location
+  async function getApproxLocation() {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const data = await res.json();
+      return {
+        lat: data.latitude,
+        lng: data.longitude,
+        city: data.city,
+        country: data.country_name,
+      };
+    } catch (err) {
+      console.error("IP location failed:", err);
+      return { lat: null, lng: null, city: null, country: null };
+    }
+  }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -42,8 +59,14 @@ export default function Home() {
     setLoading(true);
     try {
       let coords = { lat: null, lng: null };
+      let locationData = { city: null, country: null };
 
-      // 🌍 Try to get geolocation
+      // 🌍 First try IP-based geolocation
+      const approx = await getApproxLocation();
+      coords = { lat: approx.lat, lng: approx.lng };
+      locationData = { city: approx.city, country: approx.country };
+
+      // 🛰 Optionally try precise browser geolocation (only if allowed)
       if (navigator.geolocation) {
         await new Promise((resolve) => {
           navigator.geolocation.getCurrentPosition(
@@ -54,7 +77,7 @@ export default function Home() {
               };
               resolve();
             },
-            () => resolve(), // ignore errors, allow posting
+            () => resolve(), // denied, stick with IP
             { enableHighAccuracy: true }
           );
         });
@@ -64,9 +87,11 @@ export default function Home() {
         emoji: selectedEmoji,
         lat: coords.lat,
         lng: coords.lng,
+        city: locationData.city || "",
+        country: locationData.country || "",
         userAgent: navigator.userAgent,
         text: values.text || "",
-        userId: currentUserId ? currentUserId : null,
+        userId: currentUserId || null,
       };
 
       await MoodService.createMood(payload);
@@ -98,7 +123,7 @@ export default function Home() {
               className="absolute z-[999] top-3 w-full flex items-center justify-center cursor-pointer "
             >
               <div className="w-3/4 bg-[#f5f5f520] px-3 sm:py-1 py-2 rounded-full backdrop-blur-xl flex items-center justify-between">
-                <span className="text-xs sm:text-base">
+                <span className="text-sm sm:text-base text-center w-full">
                   Click to share your mood
                 </span>
                 {/* <span className="text-xs opacity-50">
@@ -179,6 +204,11 @@ export default function Home() {
                           </Button>
                         </motion.div>
                       </Form.Item>
+                      <span className="text-white opacity-50 font-extralight text-xs">
+                        <InfoCircleOutlined /> Your privacy is valued so feel
+                        free to deny precise location access. Moodly will make
+                        do with an estimate location 😊.
+                      </span>
                     </Form>
                   </motion.div>
                 )}

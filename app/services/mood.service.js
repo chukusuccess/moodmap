@@ -8,7 +8,16 @@ import {
 
 export class MoodService {
   // ✅ Create a new mood entry
-  static async createMood({ emoji, text, lat, lng, userAgent, userId = null }) {
+  static async createMood({
+    emoji,
+    text,
+    lat,
+    lng,
+    city,
+    country,
+    userAgent,
+    userId = null,
+  }) {
     try {
       const res = await databases.createDocument(
         dbID,
@@ -19,6 +28,8 @@ export class MoodService {
           text,
           lat,
           lng,
+          city,
+          country,
           userAgent,
           userId, // null if anonymous
         }
