@@ -12,6 +12,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { AntThemeProvider } from "./contexts/ThemeProvider";
+import { ThemeProvider } from "./contexts/DarkModeProvider";
 import { Suspense } from "react";
 import { Spin } from "antd";
 import AppNavbar from "./components/AppNav";
@@ -64,9 +65,11 @@ export default function RootLayout({ children }) {
               </div>
             }
           >
-            <AppNavbar />
-            <span className="mb-16" />
-            {children}
+            <ThemeProvider>
+              <AppNavbar />
+              <span className="mb-16" />
+              {children}
+            </ThemeProvider>
           </Suspense>
         </AntThemeProvider>
       </body>

@@ -111,7 +111,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center max-w-screen noscroll">
+    <div className="flex flex-col items-center bg-[#ededf0] dark:bg-[#232325e6] justify-center max-w-screen noscroll">
       <Splash />
       <div className="w-screen p-4 noscroll">
         {contextHolder}
@@ -122,8 +122,8 @@ export default function Home() {
               onClick={() => setShare((prev) => !prev)}
               className="absolute z-[999] top-3 w-full flex items-center justify-center cursor-pointer "
             >
-              <div className="w-3/4 bg-[#f5f5f520] px-3 sm:py-1 py-2 rounded-full backdrop-blur-xl flex items-center justify-between">
-                <span className="text-sm sm:text-base text-center w-full">
+              <div className="w-3/4 bg-[#00000020] dark:bg-[#f5f5f520] px-3 sm:py-1 py-2 rounded-full backdrop-blur-xl flex items-center justify-between">
+                <span className="text-sm sm:text-base text-center w-full dark:text-[#c3c3c6] text-[#232325e6]">
                   Click to share your mood
                 </span>
                 {/* <span className="text-xs opacity-50">
@@ -139,7 +139,7 @@ export default function Home() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-[#f5f5f520] backdrop-blur-xl rounded-xl p-2"
+                    className="dark:bg-[#f5f5f520] bg-[#0e0e0e20] backdrop-blur-xl rounded-xl p-2"
                   >
                     <Form
                       form={form}
@@ -171,7 +171,7 @@ export default function Home() {
                       <Form.Item
                         name="text"
                         label={
-                          <span className="text-[#c3c3c6]">
+                          <span className="dark:text-[#c3c3c6] text-[#232325e6]">
                             What's on your mind?
                           </span>
                         }
@@ -204,7 +204,7 @@ export default function Home() {
                           </Button>
                         </motion.div>
                       </Form.Item>
-                      <span className="text-white opacity-50 font-extralight text-xs">
+                      <span className="dark:text-white text-[#232325e6] opacity-50 font-extralight text-xs">
                         <InfoCircleOutlined /> Your privacy is valued so feel
                         free to deny precise location access. Moodly will make
                         do with an estimate location 😊.

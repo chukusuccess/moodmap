@@ -56,9 +56,9 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="max-h-screen h-screen noscroll bg-[#19191c] flex flex-col items-center justify-center px-4 w-full">
+    <div className="max-h-screen h-screen noscroll bg-[#ededf0] dark:bg-[#19191c] flex flex-col items-center justify-center px-4 w-full">
       {contextHolder}
-      <div className="bg-black shadow-md rounded-xl p-8 w-full max-w-md">
+      <div className="bg-white dark:bg-black shadow-md rounded-xl p-8 w-full max-w-md">
         <Title level={3} className="text-center mb-6">
           {isSignUp ? "Create Account" : "Welcome Back"}
         </Title>

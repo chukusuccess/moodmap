@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { MoodService } from "../services/mood.service";
 import { moodCategories } from "../resources/constants";
+import { useTheme } from "../contexts/DarkModeProvider";
 
 // helper: find category by emoji
 const getCategoryForEmoji = (emoji) =>
@@ -32,6 +33,8 @@ export const RightSideBar = ({ onPanTo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
   const [selectedPercentage, setSelectedPercentage] = useState(null);
+
+  const { theme } = useTheme();
 
   // fast emoji -> category index map once
   const emojiToCatIndex = useMemo(() => {
@@ -99,17 +102,17 @@ export const RightSideBar = ({ onPanTo }) => {
   }, []);
 
   return (
-    <div className="w-full h-full p-4 rounded-xl bg-[#000] shadow-lg flex flex-col gap-4">
+    <div className="w-full h-full p-4 rounded-xl bg-[#fff] dark:bg-[#000] shadow-lg flex flex-col gap-4">
       {/* Mood of the Day */}
       <Card
         style={{
           // background: getCategoryForEmoji(moodOfDay?.emoji)?.hex || "#19191c",
-          background: "#19191c",
+          background: theme === "dark" ? "#19191c" : "#ededf0",
+          color: theme === "dark" ? "#ededf0" : "#232325e6",
           borderLeft: `2px solid ${getCategoryForEmoji(moodOfDay?.emoji)?.hex}`,
           borderRight: `2px solid ${
             getCategoryForEmoji(moodOfDay?.emoji)?.hex
           }`,
-          color: "#ededf0",
           borderRadius: "0.75rem",
           padding: 4,
         }}
@@ -118,10 +121,10 @@ export const RightSideBar = ({ onPanTo }) => {
       >
         {moodOfDay ? (
           <div className="flex items-center gap-2">
-            <span className="animate-bounce text-4xl bg-[#00000030] rounded-full aspect-square flex items-center justify-center">
+            <span className="animate-bounce text-4xl bg-[#ffffff70] dark:bg-[#00000030] rounded-full aspect-square flex items-center justify-center">
               {moodOfDay?.emoji}
             </span>
-            <div className="flex flex-col text-2xl w-full bg-[#00000030] rounded-lg px-3 py-1">
+            <div className="flex flex-col text-2xl w-full bg-[#ffffff70] dark:bg-[#00000030] rounded-lg px-3 py-1">
               <h2 className="text-lg font-semibold mb-2">Mood of the Day</h2>
               <span className="text-xs">
                 {moodOfDay.count} {moodOfDay.count > 1 ? "people" : "person"}{" "}
@@ -137,8 +140,8 @@ export const RightSideBar = ({ onPanTo }) => {
       {/* Global Distribution */}
       <Card
         style={{
-          background: "#19191c",
-          color: "#ededf0",
+          background: theme === "dark" ? "#19191c" : "#ededf0",
+          color: theme === "dark" ? "#ededf0" : "#232325e6",
           borderRadius: "0.75rem",
         }}
         variant="borderless"
@@ -155,7 +158,7 @@ export const RightSideBar = ({ onPanTo }) => {
                 whileTap={{ scale: 0.8 }}
                 key={index}
                 className="w-16 h-16 rounded-full flex flex-col items-center justify-center"
-                style={{ backgroundColor: "#000" }}
+                style={{ backgroundColor: theme === "dark" ? "#000" : "#fff" }}
                 onClick={() => showModal(d.pct, d.cat)}
               >
                 <div
@@ -172,8 +175,8 @@ export const RightSideBar = ({ onPanTo }) => {
       {/* Live Mood Feed */}
       <Card
         style={{
-          background: "#19191c",
-          color: "#ededf0",
+          background: theme === "dark" ? "#19191c" : "#ededf0",
+          color: theme === "dark" ? "#ededf0" : "#232325e6",
           borderRadius: "0.75rem",
           padding: 6,
         }}
@@ -191,7 +194,7 @@ export const RightSideBar = ({ onPanTo }) => {
             <div
               key={m?.$id}
               onClick={() => onPanTo?.([m?.lat, m?.lng])} // ✅ Pan to mood location
-              className="flex items-center gap-2 rounded-lg bg-black p-2 cursor-pointer"
+              className="flex items-center gap-2 rounded-lg dark:bg-black bg-white p-2 cursor-pointer"
             >
               <span className="text-xl">{m?.emoji}</span>
               <div className="flex flex-col">

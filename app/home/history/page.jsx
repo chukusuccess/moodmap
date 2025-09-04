@@ -8,6 +8,7 @@ import { MoodService } from "@/app/services/mood.service";
 import dayjs from "dayjs";
 import { useAuth } from "@/app/contexts/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/app/contexts/DarkModeProvider";
 
 const { Search } = Input;
 
@@ -18,6 +19,8 @@ export default function History() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [currentUserId, setCurrentUserId] = useState(null);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -59,12 +62,12 @@ export default function History() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-6 pb-20 w-full">
+    <div className="p-6 pb-20 w-full dark:bg-[#232325e6] bg-[#ededf0] dark:text-[#c3c3c6] text-[#232325e6]">
       {contextHolder}
       <Search
         variant="filled"
         size="large"
-        className="w-full bg-[#ffffff60] backdrop-blur-xl rounded-md subtle-shadow"
+        className="w-full dark:bg-[#ffffff60] bg-[#00000020] backdrop-blur-xl rounded-md subtle-shadow"
         placeholder="Search your mood history..."
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: 16 }}
@@ -91,8 +94,8 @@ export default function History() {
                 size="small"
                 variant="borderless"
                 style={{
-                  background: "#19191c",
-                  color: "#ededf0",
+                  background: theme === "dark" ? "#19191c" : "#fff",
+                  color: theme === "dark" ? "#ededf0" : "#232325e6",
                   borderRadius: "0.75rem",
                   padding: 6,
                 }}

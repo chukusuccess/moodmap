@@ -10,7 +10,7 @@ function Splash() {
         height: 0,
         transition: { duration: 0.5, delay: 3.5 },
       }}
-      className="absolute top-0 z-[99999] flex items-center justify-center w-screen h-screen overflow-hidden bg-[#19191c]"
+      className="absolute top-0 z-[99999] flex items-center justify-center w-screen h-screen overflow-hidden bg-[#ededf0] dark:bg-[#19191c]"
     >
       <SplashText />
     </motion.div>

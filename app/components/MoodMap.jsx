@@ -6,6 +6,7 @@ import { MoodService } from "../services/mood.service";
 import { lexend } from "../layout";
 import { moodCategories } from "../resources/constants";
 import dayjs from "dayjs";
+import { useTheme } from "../contexts/DarkModeProvider";
 
 // helper: find category by emoji
 const getCategoryForEmoji = (emoji) =>
@@ -17,6 +18,8 @@ export default function MoodMap({ setPanTo }) {
   const [mounted, setMounted] = useState(false);
   const [moods, setMoods] = useState([]);
   const mapRef = useRef(null);
+
+  const { theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -57,14 +60,21 @@ export default function MoodMap({ setPanTo }) {
         whenCreated={handleMapCreated}
         attributionControl={false}
       >
-        {/* Dark tile layer */}
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
-          subdomains="abcd"
-          maxZoom={6}
-          minZoom={1}
-        />
+        {theme === "dark" ? (
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            subdomains="abcd"
+            maxZoom={6}
+            minZoom={1}
+          />
+        ) : (
+          <TileLayer
+            url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            subdomains="abcd"
+            maxZoom={6}
+            minZoom={1}
+          />
+        )}
         {/* ✅ Custom Attribution */}
         <div className="absolute bottom-1 right-2 text-[10px] text-gray-400 opacity-70 pointer-events-none z-[1000] ">
           ©{" "}
@@ -86,15 +96,6 @@ export default function MoodMap({ setPanTo }) {
             CARTO
           </a>
         </div>
-
-        {/* white tile layer */}
-        {/* <TileLayer
-//           url="https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-//           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://www.carto.com/">CARTO</a>'
-//           subdomains="abcd"
-//           maxZoom={6}
-//           minZoom={1}
-//         /> */}
 
         {/* Mood pins */}
         {moods

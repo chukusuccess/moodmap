@@ -67,7 +67,7 @@ const AuthProvider = ({ children }) => {
 
   if (!isAuthenticated) {
     return (
-      <div className="w-screen h-full max-h-screen">
+      <div className="w-screen h-screen max-h-screen pt-20 dark:bg-[#232325e6] bg-[#ededf0] dark:text-[#c3c3c6] text-[#232325e6]">
         <Result
           status="403"
           title="Oops!"

@@ -23,10 +23,8 @@ export const AntThemeProvider = ({ children }) => (
         Input: {
           componentSize: "large",
         },
-        Timeline: {
-          dotBorderWidth: 5,
-          dotBg: "#f5f5f5",
-          tailWidth: 4,
+        Spin: {
+          colorPrimary: "#fd356e",
         },
       },
     }}
