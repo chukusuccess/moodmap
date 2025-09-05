@@ -62,58 +62,60 @@ export default function History() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="p-6 pb-20 w-full dark:bg-[#232325e6] bg-[#ededf0] dark:text-[#c3c3c6] text-[#232325e6]">
+    <div className="p-6 pb-20 w-full min-h-screen dark:bg-[#232325e6] bg-[#ededf0] dark:text-[#c3c3c6] text-[#232325e6] flex flex-col items-center">
       {contextHolder}
-      <Search
-        variant="filled"
-        size="large"
-        className="w-full dark:bg-[#ffffff60] bg-[#00000020] backdrop-blur-xl rounded-md subtle-shadow"
-        placeholder="Search your mood history..."
-        onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginBottom: 16 }}
-        allowClear
-      />
-
-      <div className="flex flex-col gap-3">
-        {filtered.length === 0 ? (
-          <Empty
-            description={
-              <span className="text-[#ededf0] opacity-50">
-                No moods yet. Share your first mood!
-              </span>
-            }
-          />
-        ) : (
-          filtered.map((m) => (
-            <motion.div
-              key={m.$id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <Card
-                size="small"
-                variant="borderless"
-                style={{
-                  background: theme === "dark" ? "#19191c" : "#fff",
-                  color: theme === "dark" ? "#ededf0" : "#232325e6",
-                  borderRadius: "0.75rem",
-                  padding: 6,
-                }}
+      <div className="w-full sm:max-w-1/3">
+        <Search
+          variant="filled"
+          size="large"
+          className="w-full dark:bg-[#ffffff60] bg-[#00000020] backdrop-blur-xl rounded-md subtle-shadow"
+          placeholder="Search your mood history..."
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginBottom: 16 }}
+          allowClear
+        />
+        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 mb-4">
+          {filtered.length === 0 ? (
+            <Empty
+              description={
+                <span className="text-[#ededf0] opacity-50">
+                  No moods yet. Share your first mood!
+                </span>
+              }
+            />
+          ) : (
+            filtered.map((m) => (
+              <motion.div
+                key={m.$id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className=""
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{m.emoji}</span>
-                  <div className="flex flex-col">
-                    <span className="text-sm">{m.text || "No caption"}</span>
-                    <span className="text-xs flex items-center gap-1 opacity-50">
-                      <ClockCircleOutlined />{" "}
-                      {dayjs(m.$createdAt).format("MMM D, YYYY h:mm A")}
-                    </span>
+                <Card
+                  size="small"
+                  variant="borderless"
+                  style={{
+                    background: theme === "dark" ? "#19191c" : "#fff",
+                    color: theme === "dark" ? "#ededf0" : "#232325e6",
+                    borderRadius: "0.75rem",
+                    padding: 6,
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{m.emoji}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm">{m.text || "No caption"}</span>
+                      <span className="text-xs flex items-center gap-1 opacity-50">
+                        <ClockCircleOutlined />{" "}
+                        {dayjs(m.$createdAt).format("MMM D, YYYY h:mm A")}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))
-        )}
+                </Card>
+              </motion.div>
+            ))
+          )}
+        </div>
         <div className="my-10 w-full flex flex-row gap-5">
           {filtered.length === 0 && (
             <Button
