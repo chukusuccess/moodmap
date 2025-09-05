@@ -115,7 +115,7 @@ export default function Home() {
       <Splash />
       <div className="w-screen p-4 noscroll">
         {contextHolder}
-        <div className="w-full h-fit sm:h-[85vh] flex flex-col sm:flex-row sm:items-start sm:justify-start gap-4 noscroll">
+        <div className="w-full h-fit sm:h-[90vh] flex flex-col sm:flex-row sm:items-start sm:justify-start gap-4 noscroll">
           <div className="rounded-xl sm:flex-3/5 flex-1 w-full aspect-square sm:aspect-auto sm:w-fit sm:h-full relative">
             <motion.div
               whileTap={{ scale: 0.8 }}
