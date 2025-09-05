@@ -70,8 +70,14 @@ const AuthProvider = ({ children }) => {
       <div className="w-screen h-screen max-h-screen pt-20 dark:bg-[#232325e6] bg-[#ededf0] dark:text-[#c3c3c6] text-[#232325e6]">
         <Result
           status="403"
-          title="Oops!"
-          subTitle="Sorry, you have to be logged in to view this page."
+          title={
+            <span className="dark:text-[#c3c3c6] text-[#232325e6]">Oops!</span>
+          }
+          subTitle={
+            <span className="dark:text-[#c3c3c6] text-[#232325e6]">
+              Sorry, you have to be logged in to view this page.
+            </span>
+          }
           extra={
             <Link replace href={"/auth"}>
               <span className="bg-white hover:bg-[#000] py-2 px-6 rounded-full">

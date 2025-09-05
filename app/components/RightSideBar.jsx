@@ -18,12 +18,21 @@ const getCategoryForEmoji = (emoji) =>
   ) || null;
 
 // helper: get country name from coord
+// helper: get country name from coord
 async function getCountryName(lat, lng) {
-  const res = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
-  );
-  const data = await res.json();
-  return data.address?.country || "Unknown";
+  if (lat == null || lng == null) {
+    return "Earth"; // fallback
+  }
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+    );
+    const data = await res.json();
+    return data.address?.country || "Earth";
+  } catch (err) {
+    console.error("Reverse geocoding failed:", err);
+    return "Earth";
+  }
 }
 
 export const RightSideBar = ({ onPanTo }) => {
@@ -80,13 +89,19 @@ export const RightSideBar = ({ onPanTo }) => {
     MoodService.getMoodOfTheDay().then(setMoodOfDay);
     MoodService.getMoodDistribution().then(setDistribution);
     MoodService.getTodayMoods().then(async (res) => {
-      const withCountries = await Promise.all(
+      const withCountries = await Promise.allSettled(
         res.documents.slice(0, 10).map(async (m) => ({
           ...m,
           country: await getCountryName(m.lat, m.lng),
         }))
       );
-      setRecentMoods(withCountries);
+
+      // filter only fulfilled promises
+      setRecentMoods(
+        withCountries
+          .filter((r) => r.status === "fulfilled")
+          .map((r) => r.value)
+      );
     });
 
     // 2. Subscribe to realtime updates
@@ -109,8 +124,8 @@ export const RightSideBar = ({ onPanTo }) => {
           // background: getCategoryForEmoji(moodOfDay?.emoji)?.hex || "#19191c",
           background: theme === "dark" ? "#19191c" : "#ededf0",
           color: theme === "dark" ? "#ededf0" : "#232325e6",
-          borderLeft: `2px solid ${getCategoryForEmoji(moodOfDay?.emoji)?.hex}`,
-          borderRight: `2px solid ${
+          borderLeft: `4px solid ${getCategoryForEmoji(moodOfDay?.emoji)?.hex}`,
+          borderRight: `4px solid ${
             getCategoryForEmoji(moodOfDay?.emoji)?.hex
           }`,
           borderRadius: "0.75rem",

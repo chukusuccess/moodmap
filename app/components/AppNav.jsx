@@ -21,7 +21,7 @@ const AppNavbar = () => {
   const navLinks = [
     { label: "Home", path: "/" },
     { label: "See Mood History", path: "/home/history" },
-    { label: "About", path: "/" },
+    { label: "About", path: "/about" },
   ];
 
   return (
@@ -64,7 +64,7 @@ const AppNavbar = () => {
         }}
         onClose={toggleDrawer}
         open={open}
-        title="MoodMap."
+        title="Moodly."
         extra={
           <Button
             type="primary"
