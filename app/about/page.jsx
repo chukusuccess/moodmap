@@ -83,6 +83,7 @@ const AboutPage = () => {
             endTime="09:05"
             description={"Take a minute to share your mood today 🌍✨"}
             timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+            recurrence="RRULE:FREQ=DAILY"
             buttonsList={true}
             hideTextLabelButton={true}
             buttonStyle="round"
