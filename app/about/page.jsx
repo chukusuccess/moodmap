@@ -77,11 +77,13 @@ const AboutPage = () => {
           <AddToCalendarButton
             name={`Daily Mood Check-in${username ? ` with ${username}` : ""}`}
             options={["Apple", "Google", "iCal", "Microsoft365"]}
-            location={"Earth"}
+            location={"https://moodly.appwrite.network"}
             startDate={dateStr}
             startTime="09:00"
             endTime="09:05"
-            description={"Take a minute to share your mood today 🌍✨"}
+            description={
+              "Take a minute to share your mood today 🌍✨\n\nLog here: https://moodly.appwrite.network"
+            }
             timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
             recurrence="RRULE:FREQ=DAILY"
             buttonsList={true}
