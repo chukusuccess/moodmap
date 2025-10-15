@@ -46,14 +46,18 @@ export const loversQuarrel = Lovers_Quarrel({
   weight: ["400"],
 });
 
-// export const metadata = {
-//   title: "Mood Map",
-//   description: "Global mood distribution across the globe daily.",
-// };
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>Mood Map</title>
+        <meta
+          name="description"
+          content="Global mood distribution across the globe daily."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet="utf-8" />
+      </head>
       <body
         className={`${lexend.className} antialiased flex flex-col items-center noscroll`}
       >

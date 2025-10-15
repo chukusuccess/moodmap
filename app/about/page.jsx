@@ -153,6 +153,14 @@ const AboutPage = () => {
           meaningful ways. This project was born out of a desire to turn code
           into community, empathy, and awareness.
         </p>
+        <br />
+        <a href="https://www.buymeacoffee.com/successchuku">
+          <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=successchuku&button_colour=FF5F5F&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" />
+        </a>
+        <br />
+        <p className="opacity-70">
+          Your support helps to keep the servers running.
+        </p>
       </div>
     </div>
   );
