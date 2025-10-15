@@ -35,7 +35,7 @@ const AboutPage = () => {
   return (
     <div className="max-h-screen h-screen w-full noscroll bg-[#ededf0] dark:bg-[#19191c] dark:text-[#c3c3c6] text-[#232325e6] flex flex-col items-center justify-start p-8 text-center sm:p-20 text-sm sm:text-base overflow-y-auto">
       {contextHolder}
-      <div className="w-full lg:w-2/5">
+      <div className="w-full lg:w-2/5 flex flex-col justify-center items-center">
         {/* Heading */}
         <h1 className="text-2xl">About Moodly</h1>
         <br />
